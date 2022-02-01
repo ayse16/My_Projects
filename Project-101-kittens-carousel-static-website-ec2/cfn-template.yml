@@ -1,6 +1,8 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: |
+
+Description: | 
   This template launches an EC2 instance by using CloudFormation 
+
 Resources:
   WEBServerInstance:
     Type: AWS::EC2::Instance
@@ -12,31 +14,33 @@ Resources:
         - ssh+http
       Tags:
         - Key: Name
-          Value: WebServer-of-StackName
+          Value: WebServer-Instance
       UserData:
-        Fn::Base64: |
+        Fn::Base64: !Sub |
           #! /bin/bash
-
-          #update os
-          sudo yum update -y
+          yum update -y
           #install apache server
-          sudo yum install -y httpd
-          sudo chmod -R 777 /var/www/html
+          yum install -y httpd
           cd /var/www/html
-          sudo wget -O cat0.jpg https://raw.githubusercontent.com/clarusway/clarusway-aws-10-22/main/aws/projects/Project-101-kittens-carousel-static-website-ec2/static-web/cat0.jpg?token=GHSAT0AAAAAABP7POWSSA45KH76SH2O77HCYPVZ2UA
-          sudo wget -O cat1.jpg https://raw.githubusercontent.com/clarusway/clarusway-aws-10-22/main/aws/projects/Project-101-kittens-carousel-static-website-ec2/static-web/cat1.jpg?token=GHSAT0AAAAAABP7POWSDM6PAHLPCHMTAWZIYPVZ3KQ
-          sudo wget -O cat2.jpg https://raw.githubusercontent.com/clarusway/clarusway-aws-10-22/main/aws/projects/Project-101-kittens-carousel-static-website-ec2/static-web/cat2.jpg?token=GHSAT0AAAAAABP7POWS4WAAGMZUMQEU73KMYPVZ3WQ
-          sudo wget -O cat3.png https://raw.githubusercontent.com/clarusway/clarusway-aws-10-22/main/aws/projects/Project-101-kittens-carousel-static-website-ec2/static-web/cat3.png?token=GHSAT0AAAAAABP7POWSWJTDBGDCWPTA6BLAYPVZ4FQ
-          sudo wget -O index.html https://raw.githubusercontent.com/clarusway/clarusway-aws-10-22/main/aws/projects/Project-101-kittens-carousel-static-website-ec2/static-web/index.html?token=GHSAT0AAAAAABP7POWTN6TK2QKXXEY5I7FSYPVZ4SA
+          wget https://raw.githubusercontent.com/ayse16/my_projects/main/Project-101-kittens-carousel-static-website-ec2/static-web/index.html
+          wget https://raw.githubusercontent.com/ayse16/my_projects/main/Project-101-kittens-carousel-static-website-ec2/static-web/cat0.jpg
+          wget https://raw.githubusercontent.com/ayse16/my_projects/main/Project-101-kittens-carousel-static-website-ec2/static-web/cat1.jpg
+          wget https://raw.githubusercontent.com/ayse16/my_projects/main/Project-101-kittens-carousel-static-website-ec2/static-web/cat2.jpg
+          wget https://raw.githubusercontent.com/ayse16/my_projects/main/Project-101-kittens-carousel-static-website-ec2/static-web/cat3.png
           # start apache server
-          sudo systemctl start httpd
-          sudo systemctl enable httpd
-          
+          systemctl start httpd
+          systemctl enable httpd
+Outputs:
+  WebisteUrl:
+    Description: Kittenn Carousel's URL address
+    Value: !GetAtt WEBServerInstance.PublicDnsName
+  
+            
+  
 
 
-       
+   
            
-
 
 
 
