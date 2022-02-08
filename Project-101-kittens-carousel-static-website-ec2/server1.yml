@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: |
+    Kittens Carousel is a static website application deployed with Apache Web Server on AWS Elastic Compute Cloud (EC2) Instance using AWS Cloudformation Service. 
+
+Resources:
+  WebServerInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0a8b4cd432b1c3063
+      InstanceType: t2.micro
+      KeyName: firstkey
+      SecurityGroups:
+        - mysecgroup 
+      Tags: 
+        - 
+          Key: Name
+          Value: Web_Server_of_StackName
+      UserData: 
+        Fn::Base64:
+          !Sub |
+          
+            #! /bin/bash
+            yum update -y
+            yum install -y httpd 
+            cd /var/www/html
+            FOLDER="https://raw.githubusercontent.com/ayse16/my_projects/main/Project-101-kittens-carousel-static-website-ec2/static-web"
+            cd /var/www/html
+            wget $FOLDER/index.html
+            wget $FOLDER/cat0.jpg
+            wget $FOLDER/cat1.jpg
+            wget $FOLDER/cat2.jpg
+            wget $FOLDER/cat3.png
+            systemctl start httpd
+            systemctl enable httpd 
+
+Outputs:
+  WebsiteUrl:
+    Description: Kittens Carousel's URL address
+    Value: !GetAtt WebServerInstance.PublicDnsName
